@@ -43,7 +43,11 @@ router.post('/', (req, res) => {
     const {numeroEmpleado,nombre, apellido, horasClase} = req.body;
     console.log(numeroEmpleado,nombre, apellido, horasClase);
     const query = `
-      CALL profesoresAddOrEdit(?,?,?,?,?);
+      SET @numero = ?;
+      SET @nombre = ?;
+      SET @apellido = ?;
+      SET @horas = ?;
+      CALL profesoresAddOrEdit(@id,@numero,@nombre,@apellido,@horas);
     `;
     mysqlConnection.query(query, [numeroEmpleado,nombre, apellido, horasClase], (err, rows, fields) => {
       if(!err) {
@@ -59,9 +63,14 @@ router.post('/', (req, res) => {
     const {numeroEmpleado,nombre, apellido, horasClase } = req.body;
     const { id } = req.params;
     const query = `
-    CALL profeUpdate(?,?,?,?,?);
+      SET @id = ?;
+      SET @numero = ?;
+      SET @nombre = ?;
+      SET @apellido = ?;
+      SET @horas = ?;
+      CALL profeUpdate(@id,@numero,@nombre,@apellido,@horas);
     `;
-    mysqlConnection.query(query, [numeroEmpleado,nombre, apellido, horasClase], (err, rows, fields) => {
+    mysqlConnection.query(query, [id,numeroEmpleado,nombre, apellido, horasClase], (err, rows, fields) => {
       if(!err) {
         res.json({status: 'Profe Updated'});
       } else {
